@@ -68,8 +68,18 @@ def parsenf(buf):
     return seen
 	#print "%s:%s -> %s:%s" % (nfdata['saddr'],nfdata['sport'],nfdata['daddr'],nfdata['dport'])
 
+def read_from_udp():
+    port = 7777
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.bind(("", port))
+    while 1:
+        data, addr = s.recvfrom(1500)
+        try:
+            seen_flows = parsenf(data)
+            for sf in seen.flows:
+                maybe_report(sf)
 
-def test():
+def read_from_pcap():
     """Open up a test pcap file and print out the packets"""
     with open(sys.argv[1], 'rb') as f:
         pcap = dpkt.pcap.Reader(f)
@@ -105,6 +115,6 @@ def maybe_report(sf):
     print report
 
 if __name__ == '__main__':
-    test()
-    
+    #read_from_pcap()
+    read_from_udp()
     
