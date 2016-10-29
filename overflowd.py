@@ -76,8 +76,11 @@ def read_from_udp():
         data, addr = s.recvfrom(1500)
         try:
             seen_flows = parsenf(data)
-            for sf in seen.flows:
+            for sf in seen_flows:
                 maybe_report(sf)
+        except:
+            raise
+
 
 def read_from_pcap():
     """Open up a test pcap file and print out the packets"""
@@ -92,7 +95,7 @@ def read_from_pcap():
                 raise
 
 def maybe_report(sf):
-    if(r() / float(sf['pcount']) > 0.00001): return
+    if(r() / float(sf['pcount']) > 0.01): return
     report = {}
     flowdata = {}
     flowdata['sourcetype']={"type": "Netflow", "version": 5}
