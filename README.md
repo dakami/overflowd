@@ -30,6 +30,9 @@ data from Netflow, SFlow, QFlow, etc. either goes to local analysts, or
 giant overcentralized data pits.  What if, one out of a million packets
 caused a tracer message to go to the source and destination of traffic?
 
+Purely through stochastic dynamics, you'd end up with metadata -- the nastier
+the flood, the faster the context would arrive.  
+
 It'd certainly be easier to trace spoofed flows, manage asymmetric routing
 issues (traceroute is pleasantly naive), and honestly, just figure out who to
 talk to.
