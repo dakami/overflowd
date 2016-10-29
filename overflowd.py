@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import struct, sys
 from random import SystemRandom
 
@@ -13,6 +15,10 @@ import json
 from base64 import b64encode
 
 import time
+import optparse 
+opts = None
+remainder = None
+
 
 signing_key = nacl.signing.SigningKey.generate()
 verify_key_base64 = signing_key.verify_key.encode(encoder=nacl.encoding.HexEncoder)
@@ -62,7 +68,7 @@ def parsenf(buf):
             c+=1;
             seen.append(nfdata)
         except Exception as e:
-            raise e
+            #raise e
             pass
     
     return seen
@@ -84,7 +90,7 @@ def read_from_udp():
 
 def read_from_pcap():
     """Open up a test pcap file and print out the packets"""
-    with open(sys.argv[1], 'rb') as f:
+    with open(opts.pcapfile, 'rb') as f:
         pcap = dpkt.pcap.Reader(f)
         for timestamp, buf in pcap:
             try:
@@ -95,7 +101,7 @@ def read_from_pcap():
                 raise
 
 def maybe_report(sf):
-    if(r() / float(sf['pcount']) > 0.01): return
+    if(r() / float(sf['pcount']) > opts.rate): return
     report = {}
     flowdata = {}
     flowdata['sourcetype']={"type": "Netflow", "version": 5}
@@ -117,7 +123,26 @@ def maybe_report(sf):
 
     print report
 
+
 if __name__ == '__main__':
-    #read_from_pcap()
-    read_from_udp()
+    usage ="""
+Overflowd (Traffic Intelligence Distribution Engine)
+Dan Kaminsky, Chief Scientist, whiteops.com
+with:  Cosmo Mielke
+       Jeff Ward
+Options:
+   -f pcapfile:   Load from PCAP       
+   -u udpport:    Stream from UDP port (7777)
+   -r [rate]:     Odds flow will be reported scaled by packet count (0.00001)
+
+"""
+    parser = optparse.OptionParser(usage=usage)
+    parser.add_option("-f", "--pcapfile", dest="pcapfile", help="Load from PCAP")
+    parser.add_option("-u", "--udpport",  dest="udpport", default=7777, help="Stream from UDP (7777)")
+    parser.add_option("-r", "--rate",  dest="rate", default=0.00001, help="Odds flow will be reported scaled by packet count (0.000001)")
+    opts, remainder = parser.parse_args(sys.argv)
+    if opts.pcapfile:
+        read_from_pcap()
+    else:
+        read_from_udp()
     
