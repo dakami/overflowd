@@ -132,14 +132,7 @@ if __name__ == '__main__':
     usage ="""
 Overflowd (Traffic Intelligence Distribution Engine)
 Dan Kaminsky, Chief Scientist, whiteops.com
-with:  Cosmo Mielke
-       Jeff Ward
-Options:
-   -f pcapfile:   Load from PCAP       
-   -u udpport:    Stream from UDP port (7777)
-   -r [rate]:     Odds flow will be reported scaled by packet count (0.00001)
-
-"""
+with:  Cosmo Mielke and Jeff Ward"""
     parser = optparse.OptionParser(usage=usage)
     parser.add_option("-f", "--pcapfile", dest="pcapfile", help="Load from PCAP")
     parser.add_option("-u", "--udpport",  dest="udpport", default=7777, help="Stream from UDP (7777)")
