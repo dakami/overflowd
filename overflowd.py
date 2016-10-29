@@ -120,9 +120,13 @@ def maybe_report(sf):
     signature['key'] = verify_key_base64
     signature['signature'] = b64encode(signing_key.sign(json.dumps(report)))
     report['signature']=signature
+    
+    notify(report)
 
+def notify(report):
+    # XXX TODO, send UDP, HTTP, HTTPS notifications
+    # for now, just print
     print report
-
 
 if __name__ == '__main__':
     usage ="""
