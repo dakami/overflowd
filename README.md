@@ -1,24 +1,61 @@
-# stoched
-Stochastic Traffic Factoring Utility (Daemon)
+# Overflowd
+Overflowd (Traffic Intelligence Distribution Engine)
+
+# TL;DR:
+
+Proactively distributing small bits of existing network infrastructure
+monitoring, to possible victims of abusive traffic, may reduce the difficulty
+of tracing and mitigating attacks.
 
 # Quick Start
+    # ./overflowd.py -f  netflow_4M.pcap  | head
+    {'flowdata': {'data': {'bcount': 682512, 'protocol': 6, 'tos': 0, 'etime': 1325314888, 'daddr': '122.166.77.74', 'pcount': 17001, 'flags': 16, 'stime': 1325252876, 'saddr': '122.166.82.196', 'dport': 20999, 'sport': 4568}, 'sourcetype': {'version': 5, 'type': 'Netflow'}}, 'signature': {'key': 'd52b9644ba6ffd2bdaa6505e649fd80ca80fad72baf2f46f5c83ab8a2a354df3', 'signature': 'z5yMEHH0pYe++uOiNhWzLkCyXsTQiMokNMZ3AWi8v8+0cuTy6ScCPS/RB0PXDCprmPLaC0AJpFCEW9S5bbB7CHsiZmxvd2RhdGEiOiB7ImRhdGEiOiB7ImJjb3VudCI6IDY4MjUxMiwgInByb3RvY29sIjogNiwgInRvcyI6IDAsICJldGltZSI6IDEzMjUzMTQ4ODgsICJkYWRkciI6ICIxMjIuMTY2Ljc3Ljc0IiwgInBjb3VudCI6IDE3MDAxLCAiZmxhZ3MiOiAxNiwgInN0aW1lIjogMTMyNTI1Mjg3NiwgInNhZGRyIjogIjEyMi4xNjYuODIuMTk2IiwgImRwb3J0IjogMjA5OTksICJzcG9ydCI6IDQ1Njh9LCAic291cmNldHlwZSI6IHsidmVyc2lvbiI6IDUsICJ0eXBlIjogIk5ldGZsb3cifX0sICJtZXRhZGF0YSI6IHsiaW5mbyI6ICJGTE9XU0VFTiIsICJjbGFzcyI6ICJJTkZPUk1BVElPTkFMIiwgInRpbWUiOiAxNDc3Nzc4MDI3LjEzODEwOX19'}, 'metadata': {'info': 'FLOWSEEN', 'class': 'INFORMATIONAL', 'time': 1477778027.138109}}
+    {'flowdata': {'data': {'bcount': 1395502, 'protocol': 6, 'tos': 0, 'etime': 1325838753, 'daddr': '122.166.251.246', 'pcount': 6130, 'flags': 0, 'stime': 1325834529, 'saddr': '122.166.218.109', 'dport': 445, 'sport': 3183}, 'sourcetype': {'version': 5, 'type': 'Netflow'}}, 'signature': {'key': 'd52b9644ba6ffd2bdaa6505e649fd80ca80fad72baf2f46f5c83ab8a2a354df3', 'signature': '2MVQ2fhHpeC83cE3Dt1wK08z9/dxK19PNj7P7I4yCno1zMtw1qTvLH45sTXWsCicT7bo8DF0Uj1HeJ4gDPLiCHsiZmxvd2RhdGEiOiB7ImRhdGEiOiB7ImJjb3VudCI6IDEzOTU1MDIsICJwcm90b2NvbCI6IDYsICJ0b3MiOiAwLCAiZXRpbWUiOiAxMzI1ODM4NzUzLCAiZGFkZHIiOiAiMTIyLjE2Ni4yNTEuMjQ2IiwgInBjb3VudCI6IDYxMzAsICJmbGFncyI6IDAsICJzdGltZSI6IDEzMjU4MzQ1MjksICJzYWRkciI6ICIxMjIuMTY2LjIxOC4xMDkiLCAiZHBvcnQiOiA0NDUsICJzcG9ydCI6IDMxODN9LCAic291cmNldHlwZSI6IHsidmVyc2lvbiI6IDUsICJ0eXBlIjogIk5ldGZsb3cifX0sICJtZXRhZGF0YSI6IHsiaW5mbyI6ICJGTE9XU0VFTiIsICJjbGFzcyI6ICJJTkZPUk1BVElPTkFMIiwgInRpbWUiOiAxNDc3Nzc4MDI3LjE4MTE2OH19'}, 'metadata': {'info': 'FLOWSEEN', 'class': 'INFORMATIONAL', 'time': 1477778027.181168}}
+    {'flowdata': {'data': {'bcount': 17227833, 'protocol': 6, 'tos': 0, 'etime': 1325317896, 'daddr': '122.166.80.208', 'pcount': 15726, 'flags': 24, 'stime': 1325257892, 'saddr': '122.166.72.234', 'dport': 1227, 'sport': 139}, 'sourcetype': {'version': 5, 'type': 'Netflow'}}, 'signature': {'key': 'd52b9644ba6ffd2bdaa6505e649fd80ca80fad72baf2f46f5c83ab8a2a354df3', 'signature': 'brw1G8hurkaLEFhWCrRnW0uM/kEPeoeBWDdkLeveIefuUzxPO30UHhRMSynrMAyam9tPWi0xudNrEjF8/LTwD3siZmxvd2RhdGEiOiB7ImRhdGEiOiB7ImJjb3VudCI6IDE3MjI3ODMzLCAicHJvdG9jb2wiOiA2LCAidG9zIjogMCwgImV0aW1lIjogMTMyNTMxNzg5NiwgImRhZGRyIjogIjEyMi4xNjYuODAuMjA4IiwgInBjb3VudCI6IDE1NzI2LCAiZmxhZ3MiOiAyNCwgInN0aW1lIjogMTMyNTI1Nzg5MiwgInNhZGRyIjogIjEyMi4xNjYuNzIuMjM0IiwgImRwb3J0IjogMTIyNywgInNwb3J0IjogMTM5fSwgInNvdXJjZXR5cGUiOiB7InZlcnNpb24iOiA1LCAidHlwZSI6ICJOZXRmbG93In19LCAibWV0YWRhdGEiOiB7ImluZm8iOiAiRkxPV1NFRU4iLCAiY2xhc3MiOiAiSU5GT1JNQVRJT05BTCIsICJ0aW1lIjogMTQ3Nzc3ODAyNy4yNTU3NTJ9fQ=='}, 'metadata': {'info': 'FLOWSEEN', 'class': 'INFORMATIONAL', 'time': 1477778027.255752}}
+    {'flowdata': {'data': {'bcount': 63671628, 'protocol': 47, 'tos': 0, 'etime': 1325317896, 'daddr': '122.166.14.93', 'pcount': 60572, 'flags': 16, 'stime': 1325255892, 'saddr': '3.138.170.99', 'dport': 0, 'sport': 0}, 'sourcetype': {'version': 5, 'type': 'Netflow'}}, 'signature': {'key': 'd52b9644ba6ffd2bdaa6505e649fd80ca80fad72baf2f46f5c83ab8a2a354df3', 'signature': '0eCPikLp4ywGUlvdHs/b+dFOgDdBbGuWUIdLD3tkZ5a3iGvW6pOodmtMSMpQFVfST03db+ZzfMCL0HcuGesxAXsiZmxvd2RhdGEiOiB7ImRhdGEiOiB7ImJjb3VudCI6IDYzNjcxNjI4LCAicHJvdG9jb2wiOiA0NywgInRvcyI6IDAsICJldGltZSI6IDEzMjUzMTc4OTYsICJkYWRkciI6ICIxMjIuMTY2LjE0LjkzIiwgInBjb3VudCI6IDYwNTcyLCAiZmxhZ3MiOiAxNiwgInN0aW1lIjogMTMyNTI1NTg5MiwgInNhZGRyIjogIjMuMTM4LjE3MC45OSIsICJkcG9ydCI6IDAsICJzcG9ydCI6IDB9LCAic291cmNldHlwZSI6IHsidmVyc2lvbiI6IDUsICJ0eXBlIjogIk5ldGZsb3cifX0sICJtZXRhZGF0YSI6IHsiaW5mbyI6ICJGTE9XU0VFTiIsICJjbGFzcyI6ICJJTkZPUk1BVElPTkFMIiwgInRpbWUiOiAxNDc3Nzc4MDI3LjI1NjE1M319'}, 'metadata': {'info': 'FLOWSEEN', 'class': 'INFORMATIONAL', 'time': 1477778027.256153}}
 
-    # python stoched.py ./netflow_mini.pcap.gz 100 | head
-    {'sasid': 0, 'bcount': 48, 'raddr': '122.166.4.242', 'protocol': 6, 'inputidx': 111, 'tos': 0, 'etime': 1811402026, 'daddr': '122.221.180.200', 'pcount': 1, 'flags': 0, 'stime': 1811402026, 'naddr': '99.145.4.143', 'saddr': '122.166.218.170', 'dport': 2967, 'outputidx': 120, 'sport': 3062, 'dasid': 0}
-    {'sasid': 0, 'bcount': 93, 'raddr': '122.166.4.242', 'protocol': 17, 'inputidx': 120, 'tos': 0, 'etime': 1811402154, 'daddr': '122.166.170.25', 'pcount': 1, 'flags': 0, 'stime': 1811402154, 'naddr': '122.166.170.25', 'saddr': '205.208.49.208', 'dport': 12855, 'outputidx': 116, 'sport': 50794, 'dasid': 0}
-    {'sasid': 0, 'bcount': 161, 'raddr': '122.166.4.242', 'protocol': 17, 'inputidx': 120, 'tos': 0, 'etime': 1811402604, 'daddr': '122.166.170.142', 'pcount': 1, 'flags': 0, 'stime': 1811402604, 'naddr': '122.166.170.142', 'saddr': '120.189.7.148', 'dport': 6876, 'outputidx': 116, 'sport': 22231, 'dasid': 0}
-    {'sasid': 0, 'bcount': 25056, 'raddr': '122.166.4.242', 'protocol': 6, 'inputidx': 110, 'tos': 0, 'etime': 1811402857, 'daddr': '206.212.65.165', 'pcount': 25, 'flags': 0, 'stime': 1811401513, 'naddr': '99.145.4.143', 'saddr': '122.166.16.19', 'dport': 80, 'outputidx': 120, 'sport': 49356, 'dasid': 0}
-    {'sasid': 0, 'bcount': 53, 'raddr': '122.166.4.242', 'protocol': 17, 'inputidx': 120, 'tos': 0, 'etime': 1811403113, 'daddr': '122.166.71.110', 'pcount': 1, 'flags': 0, 'stime': 1811403113, 'naddr': '122.166.71.110', 'saddr': '30.166.81.237', 'dport': 10822, 'outputidx': 108, 'sport': 22441, 'dasid': 0}
-    {'sasid': 0, 'bcount': 11016, 'raddr': '122.166.4.242', 'protocol': 6, 'inputidx': 124, 'tos': 0, 'etime': 1811402988, 'daddr': '4.214.161.101', 'pcount': 10, 'flags': 0, 'stime': 1811398636, 'naddr': '99.145.4.143', 'saddr': '122.166.38.39', 'dport': 1761, 'outputidx': 120, 'sport': 13189, 'dasid': 0}
-    {'sasid': 0, 'bcount': 806, 'raddr': '122.166.4.242', 'protocol': 6, 'inputidx': 116, 'tos': 0, 'etime': 1811402795, 'daddr': '20.56.88.217', 'pcount': 3, 'flags': 0, 'stime': 1811402603, 'naddr': '99.145.4.143', 'saddr': '122.166.174.62', 'dport': 80, 'outputidx': 120, 'sport': 1575, 'dasid': 0}
-    
+# What's going on here
+
+Our networks are increasingly under attack, we don't always quite know from
+where, and even if so, who do we talk to?  Abuse management is *hard*, just in
+terms of a communications coordination problem.  Can we make it easier?
+
+What if potentially malicious network traffic arrived with tracing data, not
+just from the networks attacking us (who might *ahem* might not be too
+communicative) but from all the networks bringing us their noise?
+
+It would require all the networks in the middle to have monitoring frameworks.
+Well, they do.  Everyone's running some protocol that ends in "flow".  But the
+data from Netflow, SFlow, QFlow, etc. either goes to local analysts, or
+giant overcentralized data pits.  What if, one out of a million packets
+caused a tracer message to go to the source and destination of traffic?
+
+It'd certainly be easier to trace spoofed flows, manage asymmetric routing
+issues (traceroute is pleasantly naive), and honestly, just figure out who to
+talk to.
+
+And we could potentially send traffic with more frequency, if we had 
+strong reason to believe a particular flow was sketchy.
+
+Think of this as a much more distributed Netflow.  Privacy issues aren't 
+really there; either you're receiving data you already know (since
+metadata follows the path of the original flows) or that you want to know
+(that somebody is spoofing traffic as you, and roughly, here's from where).
+
+This is experimental work on one of the more annoying, and difficult tasks
+we have maintaining the Internet.  We can do do better than this particular
+version of Overflowd, but it's a good place to start a conversation.
+
+
 # Notes
 
 1. Netflow data from https://traces.simpleweb.org/traces/netflow/
-2. Basic architecture concept:
-   1. My sense is we run this on netflow pcaps (that contain UDP streams of router pflows).
-   2. We do basic emission of metadata, scaled by packet count, signed, with an attached signing key and an abuse contact.
-   3. Maybe a severity field, "Informational", "Machine Suspected", "Human Suspected", "Human Confirmed / Trying To Remediate"
-   4. Was originally thinking JSON over 65535/udp, but also a HTTP(S) to 80/tcp and 443/tcp 
-   5. Sign with http://pynacl.readthedocs.io/en/latest/signing/ , just include the bare signing key in the payload for now
-3. Should support more than netflow, should support more evidence that we are actually witnessing a flow, but this is about just PoC
+2. Key management eventually works out through some formal mechanism, but
+just having a consistent key, that's used in quantity, over time, over
+many networks is its own mechanism.
+
+# TODO
+
+1. Actually send updates.  Starting with 65535/udp, then HTTP/HTTPS to source
+and dest.
+2. Persist signing key, create encryption mode
