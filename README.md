@@ -3,9 +3,9 @@ Overflowd (Traffic Intelligence Distribution Engine)
 
 # TL;DR:
 
-Proactively distributing small bits of existing network infrastructure
-monitoring, to possible victims of abusive traffic, may reduce the difficulty
-of tracing and mitigating attacks.
+Netflow to the receivers (and senders) of network flows -- proactively
+distribute abuse/misconfiguration data and contact metadata as part of
+existing network infrastructure monitoring.
 
 # Quick Start
     # ./overflowd.py -h
