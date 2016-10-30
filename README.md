@@ -40,7 +40,7 @@ communicative) but from all the networks bringing us their noise?
 It would require all the networks in the middle to have monitoring frameworks.
 Well, they do.  Everyone's running some protocol that ends in "flow".  But the
 data from Netflow, SFlow, QFlow, etc. either goes to local analysts, or
-giant overcentralized data pits.  What if, one out of a million packets
+giant overcentralized data pits*.  What if, one out of a million packets
 caused a tracer message to go to the source and destination of traffic?
 
 Purely through stochastic dynamics, you'd end up with metadata -- the nastier
@@ -65,13 +65,19 @@ This is experimental work on one of the more annoying, and difficult tasks
 we have maintaining the Internet.  We can do do better than this particular
 version of Overflowd, but it's a good place to start a conversation.
 
-
 # Notes
 
 1. Netflow data from https://traces.simpleweb.org/traces/netflow/
 2. Key management eventually works out through some formal mechanism, but
 just having a consistent key, that's used in quantity, over time, over
 many networks is its own mechanism.
+3. * Heh, giant centralized data pits (you know who you are) -- I should clarify,
+I don't dislike what you're up to, I'm just taking that whole "data sharing"
+thing as a really important aspect.  I'm trying a clever thing here -- unblocking
+the "who do we share data with" problem, by just sending it towards the
+destination networks and letting *the Internet itself route the metadata to
+where it needs to be*.
+
 
 # TODO
 
