@@ -3,8 +3,7 @@ Overflowd (Traffic Intelligence Distribution Engine)
 
 # TL;DR:
 
-Netflow to those suffering from network flows:  Proactive
-metadata delivery to endpoints from existing monitoring infrastructure.
+Netflow to those suffering from network flows:  Proactively delivering anti-spoof and contact data.
 
 # Quick Start
     # ./overflowd.py -h
@@ -45,7 +44,10 @@ giant overcentralized data pits.  What if, one out of a million packets
 caused a tracer message to go to the source and destination of traffic?
 
 Purely through stochastic dynamics, you'd end up with metadata -- the nastier
-the flood, the faster the context would arrive.  
+the flood, the faster the context would arrive.  And you wouldn't need everyone
+to deploy all at once (which is good because this is a thing that does not
+happen).  Over time, more participants, better data distribution.  Some 
+participants, some data distribution.
 
 It'd certainly be easier to trace spoofed flows, manage asymmetric routing
 issues (traceroute is pleasantly naive), and honestly, just figure out who to
